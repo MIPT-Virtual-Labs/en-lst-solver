@@ -8,5 +8,5 @@ setup(
     author="Mikhail Petrov",
     author_email="mikhail.petrov@phystech.edu",
     include_package_data=True,
-    package_data={"": ["./bin/*"]},
+    #package_data={"": ["./bin/*"]},
 )
