@@ -20,7 +20,7 @@ def main(Re, alpha):
     plt.grid() 
     plt.xlabel('c_re')
     plt.ylabel('c_im')
-    plt.savefig('Temporal spectrum.jpg')
+    plt.savefig('../out/Temporal spectrum.jpg')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="values of Re an alpha")
