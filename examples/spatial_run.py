@@ -42,7 +42,7 @@ def main(N):
     plt.grid() 
     plt.xlabel('a_re')
     plt.ylabel('a_im')
-    plt.savefig('../out/Spatial spectrum.png')
+    plt.savefig('../out/Spatial spectrum.jpg')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="value of N")

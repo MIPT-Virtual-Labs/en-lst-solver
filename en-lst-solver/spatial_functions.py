@@ -1,27 +1,7 @@
 import numpy as np
-from scipy.sparse import block_diag
 import scipy.linalg as la
-from blasius_problem import getMesh_U_DuDy
+from blasius_problem import getMesh_U_DuDy, boundary_layer_thickness, get_y, get_U, get_dudy, get_h
 from scipy.sparse.linalg import eigs
-
-
-def boundary_layer_thickness(nu, u_e, x):
-    return (nu*x/u_e)**0.5
-
-def getRe_d(nu, u_e, d):
-    return u_e*d/nu
-
-def get_y(j, y):
-    return y[j]
-
-def get_U(j, vels):
-    return vels[j]
-
-def get_dudy(j, grads):
-    return grads[j]
-
-def get_h(y):
-    return y[1] - y[0]
 
 # Functions to form matrix A and B from Spatial Eigenvalues problem Ax = alpha*Bx
 def getE1():
