@@ -95,3 +95,5 @@
 
 Для тестирования солвера ACS необходимо выполнить `python examples/amplification_curves_run.py 1000 7000 8`
 
+Результаты сохраняются в папку out. Для TS это `Temporal spectrum.jpg`, для SS - `Spatial spectrum.jpg`, для ACS - `Unstable modes.jpg` и `Amplification_curves.jpg`
+
