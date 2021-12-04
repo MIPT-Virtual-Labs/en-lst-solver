@@ -7,12 +7,13 @@ Created on Fri Nov 26 15:16:52 2021
 import sys
 sys.path.insert(1, '../en-lst-solver')
 
-import argparse
 import matplotlib.pyplot as plt
-from temporal_functions import temporal_solve
+from handle_request import handle_request
 
-def main(Re, alpha):
-    eigvals = temporal_solve(Re, alpha)
+def main(request):
+    response_dict = handle_request(request)
+    eigvals = response_dict['solution']['data']
+    
     plt.plot(eigvals.real, eigvals.imag, '+b', label='Numerical')
     plt.legend()
     plt.xlim(0, 1)
@@ -23,10 +24,16 @@ def main(Re, alpha):
     plt.savefig('../out/Temporal spectrum.jpg')
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="values of Re an alpha")
-    parser.add_argument("Re", help="Reynolds number", type=int)
-    parser.add_argument("alpha", help="wave number alpha", type=float)
-    args = parser.parse_args()
-    Re = args.Re
-    alpha = args.alpha
-    main(Re, alpha)
+    params = dict(alpha=1, Re=10000)
+    request = dict(problem="TS", args=params)
+    main(request)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

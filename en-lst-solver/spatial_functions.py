@@ -2,6 +2,7 @@ import numpy as np
 import scipy.linalg as la
 from blasius_problem import getMesh_U_DuDy, boundary_layer_thickness, get_y, get_U, get_dudy, get_h
 from scipy.sparse.linalg import eigs
+from pydantic import BaseModel, validator
 
 # Functions to form matrix A and B from Spatial Eigenvalues problem Ax = alpha*Bx
 def getE1():
@@ -89,38 +90,44 @@ def getA_matrix(omega, Re, N, mesh, vels, grads, comp_num = 3):
 
     return np.bmat(matrix_list)
 
-def spatial_solve(N):
+class SS_InputParameters(BaseModel):
+    N: int
+
+    @validator("N")
+    def check_N(cls, N):
+        if N<200 or N>2000:
+            raise ValueError("N is out of range! Correct range for N = [200, 2000]")
+        return N
+
+def spatial_solve(p: SS_InputParameters) -> np.ndarray:
     # mesh
     #N = 800
-    if N<200 or N>2000:
-        print("N is out of range! Correct range for N = [200, 2000]. Break...")
-        return np.zeros(N)
-    else:
-        y_d, u_d, dudy_d = getMesh_U_DuDy(N, 15)
-        
-        # постановка задачи в размерных переменных
-        mu = 1.85e-5
-        rho = 1.214
-        nu = mu/rho
-        u_e = 50
-        L = 3
-        
-        omega_d = 0.26/1.72
-        Re_d = 1000/1.72
-        x = nu/u_e*Re_d**2
-        d = boundary_layer_thickness(nu, u_e, x)
-        
-        omega = omega_d*(u_e/d)
-        Re = 1/nu
-        
-        y = y_d*d
-        u = u_d*u_e
-        dudy = dudy_d*u_e/d
-        
-        # расчет
-        A = getA_matrix(omega, Re, N, y, u, dudy)
-        eigvals, eigvec = eigs(A, 140, sigma=omega/u_e, which='LM')
-        
-        #обезразмерим alpha
-        eigvals = eigvals*d
-        return eigvals
+    N = p.N
+    y_d, u_d, dudy_d = getMesh_U_DuDy(N, 15)
+    
+    # постановка задачи в размерных переменных
+    mu = 1.85e-5
+    rho = 1.214
+    nu = mu/rho
+    u_e = 50
+    L = 3
+    
+    omega_d = 0.26/1.72
+    Re_d = 1000/1.72
+    x = nu/u_e*Re_d**2
+    d = boundary_layer_thickness(nu, u_e, x)
+    
+    omega = omega_d*(u_e/d)
+    Re = 1/nu
+    
+    y = y_d*d
+    u = u_d*u_e
+    dudy = dudy_d*u_e/d
+    
+    # расчет
+    A = getA_matrix(omega, Re, N, y, u, dudy)
+    eigvals, eigvec = eigs(A, 140, sigma=omega/u_e, which='LM')
+    
+    #обезразмерим alpha
+    eigvals = eigvals*d
+    return {"data" : eigvals}

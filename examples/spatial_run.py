@@ -8,13 +8,14 @@ Created on Fri Nov 26 17:31:24 2021
 import sys
 sys.path.insert(1, '../en-lst-solver')
 
-import argparse
 import matplotlib.pyplot as plt
-from spatial_functions import spatial_solve
+from handle_request import handle_request
 import numpy as np
 
-def main(N):
-    eigvals = spatial_solve(N)
+def main(request):
+    response_dict = handle_request(request)
+    #print(response_dict.keys())
+    eigvals = response_dict['solution']['data']
     
     paper_data = np.array([[0.2600153645394847,0.005216576864792044],
                            [0.2649509597575349,0.04520717573104338],
@@ -35,7 +36,7 @@ def main(N):
     paper_data /= 1.72
     
     plt.plot(paper_data[:,0], paper_data[:,1], 'xr', label='Paper') # test case for omega = 0.26
-    plt.plot(eigvals.real, eigvals.imag, '+b', label='Numerical, N='+str(N))
+    plt.plot(eigvals.real, eigvals.imag, '+b', label='Numerical')
     plt.legend()
     plt.xlim(0.1, 0.5)
     plt.ylim(-0.1, 0.3)
@@ -45,8 +46,6 @@ def main(N):
     plt.savefig('../out/Spatial spectrum.jpg')
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="value of N")
-    parser.add_argument("N", help="number of nodes", type=int)
-    args = parser.parse_args()
-    N = args.N
-    main(N)
+    params = dict(N=800)
+    request = dict(problem='SS', args=params)
+    main(request)

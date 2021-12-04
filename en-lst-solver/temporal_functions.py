@@ -2,6 +2,7 @@ from scipy.sparse import block_diag
 import numpy as np
 from channel_flow_problem import *
 import scipy.linalg as la
+from pydantic import BaseModel, validator
 
 def getE1(Re):
     return np.array([[1/Re, 0, 0],
@@ -104,20 +105,36 @@ def getB_matrix(alpha, Re, N, comp_num = 3):
         matrix_list.append(E4)
     return block_diag(matrix_list).toarray()
 
-def temporal_solve(Re, alpha):
+class TS_InputParameters(BaseModel):
+    Re: float
+    alpha: float
+
+
+    @validator("alpha")
+    def check_alpha(cls, alpha):
+        if alpha<0.1 or alpha>2 :
+            raise ValueError("alpha is out of range! Correct range for alpha = [0.1;2]")
+        return alpha
+    
+    @validator("Re")
+    def check_Re(cls, Re):
+        if Re<1000 or Re>20000 :
+            raise ValueError("Re is out of range! Correct range for Re = [1000, 20000]")
+        return Re
+
+def temporal_solve(p: TS_InputParameters) -> np.ndarray:
     N = 400
-    if alpha<0.1 or alpha>2 or Re<1000 or Re>20000:
-        print("Re or alpha are out of range! Correct range for parameters: alpha = [0.1;2], Re = [1000, 20000]. Break...")
-        return np.zeros(N)
-    else:
-        A = getA_matrix(alpha, Re, N)
-        B = getB_matrix(alpha, Re, N)
-        # test 1
-    #    alpha = 1
-    #    Re = 10000
-        eigvals = la.eigvals(A, B)
-        eigvals = eigvals/alpha
-        return eigvals
+
+    alpha = p.alpha
+    Re = p.Re
+    A = getA_matrix(alpha, Re, N)
+    B = getB_matrix(alpha, Re, N)
+    # test 1
+#    alpha = 1
+#    Re = 10000
+    eigvals = la.eigvals(A, B)
+    eigvals = eigvals/alpha
+    return {'data':eigvals}
 
 
 

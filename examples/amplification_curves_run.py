@@ -8,13 +8,21 @@ Created on Mon Nov 29 15:16:43 2021
 import sys
 sys.path.insert(1, '../en-lst-solver')
 
-import argparse
 import matplotlib.pyplot as plt
-from amplification_curves_functions import amplfication_curves_solve
+from handle_request import handle_request
 import numpy as np
+from amplification_curves_functions import ACS_InputParameters
 
-def main(omega_min, omega_max, number_of_omegas):
-    x_mesh, ai_for_omega, amplification_curves = amplfication_curves_solve(omega_min, omega_max, number_of_omegas)
+def main(request):
+    response_dict = handle_request(request)
+    x_mesh = response_dict['solution']['x_mesh']
+    ai_for_omega = response_dict['solution']['ai_for_omega']
+    amplification_curves = response_dict['solution']['amplification_curves']
+    
+    p = ACS_InputParameters(**request['args'])
+    omega_min = p.omega_min
+    omega_max = p.omega_max
+    number_of_omegas = p.number_of_omegas
     omega_mesh = np.linspace(omega_min, omega_max, number_of_omegas)
     
     #plot unstable modes
@@ -39,15 +47,9 @@ def main(omega_min, omega_max, number_of_omegas):
     plt.savefig('../out/Amplification_curves.jpg')
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="general parameters")
-    parser.add_argument("omega_min", help="Minimal omega", type=int)
-    parser.add_argument("omega_max", help="Maximal omega", type=int)
-    parser.add_argument("number_of_omegas", help="Number of omegas", type=int)
-    args = parser.parse_args()
-    omega_min = args.omega_min
-    omega_max = args.omega_max
-    number_of_omegas = args.number_of_omegas
-    main(omega_min, omega_max, number_of_omegas)
+    params = dict(omega_min=1000, omega_max=7000, number_of_omegas=8)
+    request = dict(problem="ACS", args=params)
+    main(request)
     
     
     
