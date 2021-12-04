@@ -89,11 +89,11 @@
 ```
 
 # Тестирование
-Для тестирования солвера TS необходимо выполнить `python examples/temporal_run.py 10000 1.0`
+Для тестирования солвера TS необходимо выполнить `python examples/temporal_run.py`
 
-Для тестирования солвера SS необходимо выполнить `python examples/spatial_run.py 800`
+Для тестирования солвера SS необходимо выполнить `python examples/spatial_run.py`
 
-Для тестирования солвера ACS необходимо выполнить `python examples/amplification_curves_run.py 1000 7000 8`
+Для тестирования солвера ACS необходимо выполнить `python examples/amplification_curves_run.py`
 
 Результаты сохраняются в папку out. Для TS это `Temporal spectrum.jpg`, для SS - `Spatial spectrum.jpg`, для ACS - `Unstable modes.jpg` и `Amplification_curves.jpg`
 
