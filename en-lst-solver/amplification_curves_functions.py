@@ -134,12 +134,12 @@ class ACS_InputParameters(BaseModel):
     omega_max: int
     number_of_omegas: int
 
-
-    @validator("omega_min", "omega_max")
-    def check_omega(cls, omega_min,omega_max):
-        if omega_min<500 or omega_max>10000 or omega_max<omega_min:
-            raise ValueError("Check omega! Correct range for omega = [500;10000]")
-        return [omega_min, omega_max]
+    # @validator('number_of_omegas', always=True)
+    # def check_omega(cls, number_of_omegas, values):
+    #     omega_min, omega_max = values.get("omega_min"), values.get("omega_max")
+    #     if omega_min<500 or omega_max>10000 or omega_max<omega_min:
+    #         raise ValueError("Check omega! Correct range for omega = [500;10000]")
+    #     return [omega_min, omega_max]
     
     @validator("number_of_omegas")
     def check_Re(cls, number_of_omegas):

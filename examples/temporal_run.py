@@ -25,6 +25,7 @@ def main(request):
 
 if __name__ == "__main__":
     params = dict(alpha=1, Re=10000)
+    #params = dict(alpha=1, Re=1)
     request = dict(problem="TS", args=params)
     main(request)
     

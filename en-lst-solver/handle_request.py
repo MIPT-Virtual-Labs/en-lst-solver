@@ -78,7 +78,7 @@ def handle_request(request_json: dict) -> dict:
             response = Response(status="failed", description=str(e))
             return response.dict()
         
-    if problem_name == 'ACS':
+    if problem_name == "ACS":
         try:
             p = ACS_InputParameters(**args)
         except ValidationError as ve:
