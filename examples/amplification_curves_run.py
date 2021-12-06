@@ -47,8 +47,8 @@ def main(request):
     plt.savefig('../out/Amplification_curves.jpg')
 
 if __name__ == "__main__":
-    #params = dict(omega_min=1000, omega_max=7000, number_of_omegas=8)
-    params = dict(omega_min=1000, omega_max=2000, number_of_omegas=1)
+    params = dict(omega_min=1000, omega_max=7000, number_of_omegas=8)
+    #params = dict(omega_min=1000, omega_max=2000, number_of_omegas=1)
     request = dict(problem="ACS", args=params)
     main(request)
     
