@@ -5,29 +5,22 @@ Created on Fri Nov 26 15:16:52 2021
 @author: mikhail
 """
 import sys
-sys.path.insert(1, '../en-lst-solver')
-
-import matplotlib.pyplot as plt
+import plotly.io as pio
+import json
 from handle_request import handle_request
 
-def main(request):
-    response_dict = handle_request(request)
-    eigvals = response_dict['solution']['data']
-    
-    plt.plot(eigvals.real, eigvals.imag, '+b', label='Numerical')
-    plt.legend()
-    plt.xlim(0, 1)
-    plt.ylim(-1, 0.1)
-    plt.grid() 
-    plt.xlabel('c_re')
-    plt.ylabel('c_im')
-    plt.savefig('../out/Temporal spectrum.jpg')
+sys.path.insert(1, '../en-lst-solver')
+
+def main(response):
+    fig_json = response["figures"][0]
+    fig_dict = json.loads(fig_json)
+    pio.kaleido.write_image(fig_dict, '../out/Temporal spectrum.jpg')
 
 if __name__ == "__main__":
     params = dict(alpha=1, Re=10000)
-    #params = dict(alpha=1, Re=1)
     request = dict(problem="TS", args=params)
-    main(request)
+    response = handle_request(request)
+    main(response)
     
     
     
