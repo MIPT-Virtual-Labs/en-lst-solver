@@ -157,7 +157,7 @@ def amplfication_curves_solve(p: ACS_InputParameters) -> np.ndarray:
     rho = 1.214
     nu = mu/rho
     u_e = 50
-    N = 2000
+    N = 2000 
     y_d, u_d, dudy_d = getMesh_U_DuDy(N, 10)
     L = 1.5
     eta = np.linspace(0, 1, 20)

@@ -6,11 +6,11 @@ Created on Fri Nov 26 17:31:24 2021
 """
 
 import sys
+sys.path.insert(1, '../en-lst-solver')
+
 import plotly.io as pio
 import json
 from handle_request import handle_request
-
-sys.path.insert(1, '../en-lst-solver')
 
 def main(response):
     fig_json = response["figures"][0]

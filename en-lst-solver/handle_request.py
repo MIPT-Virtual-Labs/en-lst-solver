@@ -15,6 +15,7 @@ from amplification_curves_functions import amplfication_curves_solve, ACS_InputP
 
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import numpy as np
 
 class Error(BaseModel):
@@ -144,20 +145,32 @@ def handle_request(request_json: dict) -> dict:
         number_of_omegas = p.number_of_omegas
         omega_mesh = np.linspace(omega_min, omega_max, number_of_omegas)
         df = pd.DataFrame({"x": x_mesh, "ai": ai_for_omega[0], "omega": str(omega_mesh[0])})
-        for i in range(number_of_omegas):
+        for i in range(1, number_of_omegas):
             text = str(omega_mesh[i])
             df_next = pd.DataFrame({"x": x_mesh, "ai": ai_for_omega[i], "omega": text})
             df = pd.concat([df, df_next], ignore_index=True)  
-        fig = px.scatter(df, x="x", y="ai", color='omega')
+        fig = px.line(df, x="x", y="ai", color='omega')
         fig_json_ai = fig.to_json()
         
         #plot amplification curves
         df = pd.DataFrame({"x": x_mesh, "N": amplification_curves[0], "omega": str(omega_mesh[0])})
-        for i in range(number_of_omegas):
+        for i in range(1, number_of_omegas):
             text = str(omega_mesh[i])
             df_next = pd.DataFrame({"x": x_mesh, "N": amplification_curves[i], "omega": text})
             df = pd.concat([df, df_next], ignore_index=True) 
-        fig = px.scatter(df, x="x", y="N", color='omega')
+        fig = px.line(df, x="x", y="N", color='omega')
+        fig.update_layout(yaxis_range=[0, 18])
+        
+        fig.add_trace(go.Scatter(
+                        x=[0.784, 1.25],
+                        y=[7.82, 10.7],
+                        mode='markers',
+                        name='Tu=0,12 %'))
+        fig.add_trace(go.Scatter(
+                        x=[0.597, 1.02],
+                        y=[6.45, 9.32],
+                        mode='markers',
+                        name='Tu=0,2 %'))
         fig_json_AC = fig.to_json()
         
         response_figs = {"figures": [fig_json_ai, fig_json_AC]}
